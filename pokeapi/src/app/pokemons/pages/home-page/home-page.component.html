@@ -1,0 +1,16 @@
+<div class="row p-3">
+  <div class="col-12">
+    <!-- <pokemons-limit-pokemons></pokemons-limit-pokemons> -->
+  </div>
+  <div class="col-12 pt-2">
+    <pokemons-pokemon-list [listPokemons]="pokemons"></pokemons-pokemon-list>
+  </div>
+  <div *ngIf="selectedIndex !== null">
+    <pokemons-form
+    (onNewPokemon)="updatePokemon($event)"
+    [pokemonToEdit]="{{}}"
+    ></pokemons-form>
+  </div>
+
+
+</div>

@@ -1,0 +1,34 @@
+<h3>Editar Pokemon</h3>
+<form (ngSubmit)="emitPokemon()">
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">Nombre</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="pokemon.name" class="form-control" type="text" value="{{pokemon.name}}" disabled readonly name="name">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">Ataque</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="pokemon.attack" class="form-control" type="number" placeholder="Attack" name="attack">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">Tipo</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="pokemon.first_types" class="form-control" type="text" placeholder="Tipo" name="first_types">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">Subtipo</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="pokemon.second_types" class="form-control" type="text" placeholder="Subtipo" name="second_types">
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label">URL</label>
+    <div class="col-sm-10">
+      <input [(ngModel)]="pokemon.image" class="form-control" type="text" placeholder="URL" name="image">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success">Editar</button>
+</form>

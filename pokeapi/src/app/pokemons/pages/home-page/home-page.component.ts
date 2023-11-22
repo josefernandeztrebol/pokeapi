@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { PokemonRow } from '../../interface/pokemon.interfaces';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { PokemonRow, Species } from '../../interface/pokemon.interfaces';
 import { PokemonServiceService } from '../../service/pokemon-service.service';
+import { PokemonListComponent } from '../../components/pokemon-list/pokemon-list.component';
 
 @Component({
   selector: 'pokemons-home-page',
@@ -12,6 +13,10 @@ export class HomePageComponent implements OnInit {
   public limit: number = 10;
   selectedIndex: number | null = null;
   selectedPokemon: PokemonRow | null = null;
+  creation: boolean = false;
+  public types: string[] = [];
+  @ViewChild(PokemonListComponent) pokemonListComponent: PokemonListComponent | undefined;
+
   constructor(private pokemonService: PokemonServiceService) {}
 
   ngOnInit() {
@@ -32,22 +37,67 @@ export class HomePageComponent implements OnInit {
         console.error('Error fetching Pokemon data:', error);
       }
     );
+    this.pokemonService.searchPokemonTypes().subscribe(
+      (typeNames) => {
+        this.types = typeNames;
+        console.log(this.types);
+      },
+      (error) => {
+        console.error('Error fetching Types data:', error);
+      }
+    );
   }
 
-  onNewPokemon(newPokemon: PokemonRow): void {
-    console.log(newPokemon);
+
+  onEditPokemonMain(event: { index: number, pokemon: PokemonRow }): void {
+    this.selectedIndex = event.index;
+    this.selectedPokemon = event.pokemon;
+    if (this.selectedPokemon) {
+      this.pokemonEdited = { ...this.selectedPokemon };
+    }
   }
 
-  updatePokemon(updatedPokemon: PokemonRow): void {
-    if (this.selectedIndex === null) return;
-    this.pokemons[this.selectedIndex] = updatedPokemon;
+  public pokemonEdited: PokemonRow = {
+    name: '',
+    attack: 0,
+    first_types: '',
+    second_types: '',
+    image: ''
+  };
+
+  cancelOperationEditPokemon(){
     this.selectedIndex = null;
     this.selectedPokemon = null;
+    this.pokemonListComponent!.pokemonSetEditing();
   }
 
-  onEditPokemon(event: { index: number, pokemon: PokemonRow }): void {
-    this.selectedIndex = event.index;
-    this.selectedPokemon = { ...event.pokemon };
+  hideFormIfNoEditPokemon(){
+    if (this.selectedIndex != null && this.selectedPokemon != null || this.creation !=  false){
+      return true
+    }
+    return false
+  }
+
+  permitEditNameIfCreation(){
+    if (this.creation){
+      return true;
+    }
+    return false
+  }
+
+
+  emitPokemon():void{
+    if (this.selectedIndex != null && this.selectedPokemon != null){
+      if (this.pokemonListComponent) {
+        this.pokemonListComponent!.updatePokemon(this.pokemonEdited, this.selectedIndex);
+      }
+      this.selectedIndex = null
+      this.selectedPokemon = null;
+      this.pokemonEdited.attack = 0;
+      this.pokemonEdited.first_types = '';
+      this.pokemonEdited.second_types = '';
+      this.pokemonEdited.image = '';
+    }
   }
 }
 

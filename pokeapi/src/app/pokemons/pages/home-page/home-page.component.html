@@ -1,16 +1,50 @@
 <div class="row p-3">
   <div class="col-12">
-    <!-- <pokemons-limit-pokemons></pokemons-limit-pokemons> -->
+    <pokemons-limit-pokemons></pokemons-limit-pokemons>
   </div>
   <div class="col-12 pt-2">
-    <pokemons-pokemon-list [listPokemons]="pokemons"></pokemons-pokemon-list>
+    <pokemons-pokemon-list (onEditPokemon)='onEditPokemonMain($event)'  [listPokemons]="pokemons"></pokemons-pokemon-list>
   </div>
-  <div *ngIf="selectedIndex !== null">
-    <pokemons-form
-    (onNewPokemon)="updatePokemon($event)"
-    [pokemonToEdit]="{{}}"
-    ></pokemons-form>
+  <div *ngIf="hideFormIfNoEditPokemon()">
+    <h3>Editar Pokemon</h3>
+    <form (ngSubmit)="emitPokemon()">
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="pokemonEdited.name" class="form-control" type="text" [readonly]="permitEditNameIfCreation()" [disabled]="permitEditNameIfCreation()" name="name">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Ataque</label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="pokemonEdited.attack" class="form-control" type="number" placeholder="Attack" name="attack">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Tipo</label>
+        <div class="col-sm-10">
+          <select [(ngModel)]="pokemonEdited.first_types" class="form-control" name="first_types">
+            <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+          </select>        
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Subtipo</label>
+        <div class="col-sm-10">
+          <select [(ngModel)]="pokemonEdited.second_types" class="form-control" name="second_types">
+            <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+          </select>        
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">URL</label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="pokemonEdited.image" class="form-control" type="text" placeholder="URL" name="image">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success">Editar</button>
+      <span class="mx-2"></span>
+      <button type="button" class="btn btn-outline-warning" (click)="cancelOperationEditPokemon()">Cancelar</button>
+    </form>
   </div>
-
-
 </div>

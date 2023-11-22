@@ -18,13 +18,19 @@
       <td>{{ pokemon.attack }}</td>
       <td><img *ngIf="pokemon.image" [src]="pokemon.image" alt="{{ pokemon.name }} Image" style="max-width: 50px;"></td>
       <td>
-        <button (click)="deletePokemon(i)" class="btn btn-outline-danger">
+        <button (click)="deletePokemon(i)" class="btn btn-outline-danger" [disabled]="pokemonEditing">
           Eliminar
         </button>
-        <p></p>
-        <button (click)="editarPokemon(i, pokemon)" class="btn btn btn-primary">
+        <span class="mx-2"></span>
+        <button (click)="editarPokemon(i, pokemon)" class="btn btn-primary">
           Editar
-        </button></td>
+        </button>
+        <span class="mx-2"></span>
+        <button (click)="createPokemon()" class="btn btn-info" [disabled]="pokemonEditing">
+          Crear
+        </button>
+      </td>
+      
     </tr>
   </tbody>
 </table>

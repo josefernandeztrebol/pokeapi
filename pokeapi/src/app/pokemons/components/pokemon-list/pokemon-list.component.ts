@@ -13,11 +13,10 @@ export class PokemonListComponent{
   public onEditPokemon: EventEmitter<{ index: number, pokemon: PokemonRow }> = new EventEmitter();
 
   @Input()
-  public listPokemons: PokemonRow[] = [
-    { name: 'Pikachu', first_types: 'Electric', second_types: 'aguacate', attack: 55, image: 'pikachu.jpg' },
-    { name: 'Charmander', first_types: 'Fire', second_types: 'aguacate2', attack: 52, image: 'charmander.jpg' },
-  ]
-
+  public pokemonEdited: { index: number, pokemon: PokemonRow } | null = null;
+  @Input()
+  public listPokemons: PokemonRow[] = []
+  public pokemonEditing: boolean = false
 
 
 
@@ -29,7 +28,27 @@ export class PokemonListComponent{
   }
 
   editarPokemon(index: number, pokemon: PokemonRow): void{
+    this.pokemonEditing = true;
     this.onEditPokemon.emit({ index, pokemon });
+  }
+
+  updatePokemon(updatedPokemon: PokemonRow, index: number): void {
+    this.listPokemons[index] = {
+      name: updatedPokemon.name,
+      attack: updatedPokemon.attack,
+      first_types: updatedPokemon.first_types,
+      second_types: updatedPokemon.second_types,
+      image: updatedPokemon.image
+    };
+    this.pokemonSetEditing()
+  }
+
+  createPokemon(){
+    this.pokemonEditing = true;
+  }
+
+  pokemonSetEditing(){
+    this.pokemonEditing = false;
   }
 
 }
